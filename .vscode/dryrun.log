@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/murachid/Desktop/pippppp-0037decc5b8a6c8015f5e3b0583f57e88b3b494d'
+gcc -Wall -Wextra -Werror -fsanitize=address *.c -g -o pipex
+make: Leaving directory '/home/murachid/Desktop/pippppp-0037decc5b8a6c8015f5e3b0583f57e88b3b494d'
+ 
