@@ -6,19 +6,22 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 11:50:03 by murachid          #+#    #+#             */
-/*   Updated: 2021/06/29 18:12:27 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/04 17:09:00 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void error_message()
+{
+	perror("pipex");
+	exit(1);
+}
+
 void	check_file(int fd, int fd_last)
 {
 	if (fd == -1)
-	{
-		perror("pipex");
-		exit(1);
-	}
+		error_message();
 	if (fd_last == -1)
 	{
 		perror("pipex");

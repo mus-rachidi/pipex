@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 11:50:29 by murachid          #+#    #+#             */
-/*   Updated: 2021/06/30 15:21:49 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/04 17:09:40 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <errno.h>
-#include <string.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
+
 typedef struct s_pipex
 {
 	char	*bin;
@@ -34,6 +34,8 @@ typedef struct s_node
 	struct s_node	*next;
 }t_node;
 
+int		ft_strcmp(char *s1, const char *s2);
+int 	file_descriptor(char **av);
 int		exec_(char **envs, t_node *node, int last_fd, int fd);
 void	append(t_node **head_ref, char *new_data);
 void	ft_command_two(char **envs, int *fd_pipe, t_node *node, int last_fd, int fd);
