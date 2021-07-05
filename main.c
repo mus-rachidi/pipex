@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/26 18:17:39 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:53:38 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/05 17:00:09 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	main(int argc, char **argv, char **envs)
 
 	nb_arg = 0;
 	fd.check_fd = 2;
+	if(argc < 6)
+		error_message();
 	fd = check_fd_file(argv, argc, &fd);
 	head = NULL;
 	while (fd.check_fd < argc - 1)

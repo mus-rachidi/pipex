@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 17:03:59 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:00:55 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/05 16:56:58 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	file_descriptor(char **av)
 		write(fd, s, ft_strlen(s));
 		free(s);
 	}
+	free(s);
 	close(fd);
 	fd = open("/tmp/tmp1", O_RDONLY);
 	return (fd);

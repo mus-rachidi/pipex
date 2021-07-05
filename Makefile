@@ -6,7 +6,7 @@
 #    By: murachid <murachid@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/31 11:50:55 by murachid          #+#    #+#              #
-#    Updated: 2021/07/04 16:45:25 by murachid         ###   ########.fr        #
+#    Updated: 2021/07/05 16:55:44 by murachid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC = *.c
 all : $(NAME)
 
 $(NAME): $(SRC)
-	@$(CC)  $(SRC) -g -o $(NAME)
+	@$(CC) $(CFLAGS) $(SRC) -g -o $(NAME)
 
 clean:
 	@echo "no .o avalaible"
