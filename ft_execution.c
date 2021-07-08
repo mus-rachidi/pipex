@@ -6,30 +6,39 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 14:56:12 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:46:38 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/08 17:55:41 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	exec_pipe(char **envs, t_node *node, t_fd *fd)
+void	exec_pipe(char **envs, t_node *node, t_fd *fd, int argc)
 {
 	int	fd_pipe[2];
 	int	pid;
+	int	status;
 
-	pipe(fd_pipe);
-	pid = fork();
-	if (!pid)
-		ft_command_two(envs, fd_pipe, node, fd);
-	close(fd_pipe[1]);
-	if (node->next)
+	while (fd->check_fd < argc - 1)
 	{
-		fd->int_fd = fd_pipe[0];
-		exec_pipe(envs, node->next, fd);
+		if (pipe(fd_pipe) == -1)
+			exit(1);
+		pid = fork();
+		if (pid == -1)
+			exit(1);
+		if (!pid)
+			ft_command_two(envs, fd_pipe, node, fd);
+		close(fd_pipe[1]);
+		if (node->next)
+		{
+			fd->int_fd = fd_pipe[0];
+			node = node->next;
+		}
+		fd->check_fd++;
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			fd->es = WEXITSTATUS(status);
 	}
-	close(fd_pipe[0]);
-	waitpid(pid, NULL, 0);
-	return (pid);
+	exit(fd->es);
 }
 
 void	ft_command_two(char **envs, int *fd_pipe, t_node *node, t_fd *fd)
@@ -49,6 +58,9 @@ void	ft_command_two(char **envs, int *fd_pipe, t_node *node, t_fd *fd)
 		dup2(fd->out_fd, 1);
 	if (fd->int_fd)
 		dup2(fd->int_fd, 0);
+	close(fd->int_fd);
+	close(fd->out_fd);
+	close(fd_pipe[0]);
 	if (execvp(cmd[0], cmd) < 0)
 		error_message();
 }

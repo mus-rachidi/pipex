@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 11:50:29 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:50:14 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/08 17:05:48 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,13 @@ typedef struct s_fd
 	int	int_fd;
 	int	out_fd;
 	int	check_fd;
+	int	es;
 }t_fd;
 
 void	error_message(void);
 int		ft_strcmp(char *s1, const char *s2);
 int		file_descriptor(char **av);
-int		exec_pipe(char **envs, t_node *node, t_fd *fd);
+void	exec_pipe(char **envs, t_node *node, t_fd *fd, int argc);
 void	append(t_node **head_ref, char *new_data);
 void	ft_command_two(char **envs, int *fd_pipe, t_node *node, t_fd *fd);
 void	exec_cmd(char **cmd, char *envs[]);

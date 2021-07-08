@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/26 18:17:39 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 17:00:09 by murachid         ###   ########.fr       */
+/*   Updated: 2021/07/08 17:49:10 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,19 @@ int	main(int argc, char **argv, char **envs)
 	int		nb_arg;
 	t_fd	fd;
 	t_node	*head;
+	int		j;
 
 	nb_arg = 0;
 	fd.check_fd = 2;
-	if(argc < 6)
+	if (argc < 5)
 		error_message();
 	fd = check_fd_file(argv, argc, &fd);
 	head = NULL;
-	while (fd.check_fd < argc - 1)
+	j = fd.check_fd;
+	while (j < argc - 1)
 	{
-		append(&head, argv[fd.check_fd]);
-		fd.check_fd++;
+		append(&head, argv[j]);
+		j++;
 		nb_arg++;
 	}
 	if (nb_arg < 2)
@@ -55,6 +57,6 @@ int	main(int argc, char **argv, char **envs)
 		perror("pipex");
 		exit(1);
 	}
-	exec_pipe(envs, head, &fd);
+	exec_pipe(envs, head, &fd, argc);
 	return (0);
 }
