@@ -12,6 +12,27 @@
 
 #include "pipex.h"
 
+int	check_path_exist(char *path)
+{
+	int	fd;
+
+	fd = 0;
+	if (path)
+	{
+		if (path[0] == '/')
+		{
+			fd = open(path, O_RDONLY);
+			if (fd)
+			{
+				close(fd);
+				return (1);
+			}
+		}
+		close(fd);
+	}
+	return (0);
+}
+
 void	exec_pipe(char **envs, t_node *node, t_fd *fd, int argc)
 {
 	int	fd_pipe[2];
@@ -48,7 +69,8 @@ void	ft_command_two(char **envs, int *fd_pipe, t_node *node, t_fd *fd)
 
 	cmd = ft_split(node->data, ' ');
 	temp = cmd[0];
-	cmd[0] = ft_path(cmd[0], envs);
+	if (check_path_exist(cmd[0]) == 0)
+		cmd[0] = ft_path(cmd[0], envs);
 	free(temp);
 	if (fd->int_fd == -1)
 		exit(1);
