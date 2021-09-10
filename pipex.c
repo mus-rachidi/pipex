@@ -6,47 +6,55 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 11:50:03 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:29:27 by murachid         ###   ########.fr       */
+/*   Updated: 2021/06/10 10:48:34 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error_message(void)
+void	check_file(int *fd)
 {
-	perror("pipex");
-	exit(1);
-}
-
-void	check_file(t_fd *fd)
-{
-	if (fd->out_fd == -1)
-		error_message();
-	if (fd->int_fd == -1)
+	if (fd[1] == -1)
 	{
-		perror("pipex");
-		close(fd->int_fd);
+		perror("pipex:");
+		exit(1);
 	}
-	if (fd->out_fd == -1 && fd->int_fd == -1)
+	if (fd[0] == -1)
+		perror("pipex:");
+	if (fd[1] == -1 && fd[0] == -1)
 		exit(1);
 }
 
-void	append(t_node **head_ref, char *new_data)
+void	check_args(int argc)
 {
-	t_node	*new_node;
-	t_node	*last;
-
-	last = *head_ref;
-	new_node = (t_node *)malloc(sizeof(t_node));
-	new_node->data = new_data;
-	new_node->next = NULL;
-	if (*head_ref == NULL)
+	if (argc != 5)
 	{
-		*head_ref = new_node;
-		return ;
+		perror("pipex:");
+		exit(1);
 	}
-	while (last->next != NULL)
-		last = last->next;
-	last->next = new_node;
-	return ;
+}
+
+int	main(int argc, char **argv, char **envs)
+{
+	int	fd[2];
+	int	fd_p[2];
+	int	pid;
+
+	check_args(argc);
+	fd[0] = open(argv[1], O_RDONLY);
+	fd[1] = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	check_file(fd);
+	if (pipe(fd_p) == -1)
+		perror("pipex:");
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("pipex:");
+		return (0);
+	}
+	if (pid == 0)
+		ft_command_one (argv, envs, fd_p, fd);
+	else
+		ft_command_two (argv, envs, fd_p, fd);
+	return (0);
 }

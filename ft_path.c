@@ -6,7 +6,7 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 14:34:19 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 16:30:39 by murachid         ###   ########.fr       */
+/*   Updated: 2021/06/10 10:48:34 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	error_check(char *path)
 {
 	if (!path)
 	{
-		perror("pipex");
+		perror("pipex:");
 		exit(1);
 	}
 }
@@ -60,7 +60,7 @@ void	ft_join(t_pipex *pipex, char *cmd)
 		i++;
 	}
 	if (pipex->fd == -1)
-		perror("pipex");
+		perror("pipex:");
 }
 
 char	*ft_path(char *cmd, char **envs)
@@ -79,7 +79,7 @@ char	*ft_path(char *cmd, char **envs)
 	}
 	else
 	{
-		perror("pipex");
+		perror("pipex:");
 		exit(1);
 	}
 }

@@ -5,62 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/29 14:56:12 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/08 17:55:41 by murachid         ###   ########.fr       */
+/*   Created: 2021/06/02 14:35:43 by murachid          #+#    #+#             */
+/*   Updated: 2021/06/10 10:48:34 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	exec_pipe(char **envs, t_node *node, t_fd *fd, int argc)
+int	check_path_exist(char *path)
 {
-	int	fd_pipe[2];
-	int	pid;
-	int	status;
+	int	fd;
 
-	while (fd->check_fd < argc - 1)
+	fd = 0;
+	if (path)
 	{
-		if (pipe(fd_pipe) == -1)
-			exit(1);
-		pid = fork();
-		if (pid == -1)
-			exit(1);
-		if (!pid)
-			ft_command_two(envs, fd_pipe, node, fd);
-		close(fd_pipe[1]);
-		if (node->next)
+		if (path[0] == '/')
 		{
-			fd->int_fd = fd_pipe[0];
-			node = node->next;
+			fd = open(path, O_RDONLY);
+			if (fd)
+			{
+				close(fd);
+				return (1);
+			}
 		}
-		fd->check_fd++;
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			fd->es = WEXITSTATUS(status);
+		close(fd);
 	}
-	exit(fd->es);
+	return (0);
 }
 
-void	ft_command_two(char **envs, int *fd_pipe, t_node *node, t_fd *fd)
+void	ft_command_one(char **argv, char **envs, int *fd_p, int *fd)
 {
 	char	**cmd;
 	char	*temp;
 
-	cmd = ft_split(node->data, ' ');
+	if (fd[0] != -1)
+	{
+		cmd = ft_split(argv[2], ' ');
+		temp = cmd[0];
+		if (check_path_exist(cmd[0]) == 0)
+			cmd[0] = ft_path(cmd[0], envs);
+		free(temp);
+		close(fd_p[0]);
+		dup2(fd_p[1], 1);
+		dup2(fd[0], 0);
+		execve(cmd[0], cmd, envs);
+		perror("pipex:");
+	}
+}
+
+void	ft_command_two(char **argv, char **envs, int *fd_p, int *fd)
+{
+	char	**cmd;
+	char	*temp;
+
+	cmd = ft_split(argv[3], ' ');
 	temp = cmd[0];
-	cmd[0] = ft_path(cmd[0], envs);
+	if (check_path_exist(cmd[0]) == 0)
+		cmd[0] = ft_path(cmd[0], envs);
 	free(temp);
-	if (fd->int_fd == -1)
-		exit(1);
-	if (node->next)
-		dup2(fd_pipe[1], 1);
-	else
-		dup2(fd->out_fd, 1);
-	if (fd->int_fd)
-		dup2(fd->int_fd, 0);
-	close(fd->int_fd);
-	close(fd->out_fd);
-	close(fd_pipe[0]);
-	if (execvp(cmd[0], cmd) < 0)
-		error_message();
+	close(fd_p[1]);
+	dup2(fd_p[0], 0);
+	dup2(fd[1], 1);
+	execve(cmd[0], cmd, envs);
+	perror("pipex:");
 }

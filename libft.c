@@ -6,21 +6,11 @@
 /*   By: murachid <murachid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 20:07:45 by murachid          #+#    #+#             */
-/*   Updated: 2021/07/05 15:50:42 by murachid         ###   ########.fr       */
+/*   Updated: 2021/06/02 20:12:11 by murachid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	ft_strcmp(char *s1, const char *s2)
-{
-	int	x;
-
-	x = 0;
-	while (s1[x] == s2[x] && s1[x] != '\0' && s2[x] != '\0')
-		x++;
-	return (s1[x] - s2[x]);
-}
 
 char	*ft_strdup(const char *s1)
 {
